@@ -1,0 +1,14 @@
+.header {
+  height: 80px;
+  background-color: darkviolet;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentSection {
+  margin-left: 15%;
+  margin-right: 10%;
+  margin-top: 20px;
+}
