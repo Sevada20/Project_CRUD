@@ -8,7 +8,7 @@
 }
 
 .contentSection {
-  margin-left: 15%;
-  margin-right: 10%;
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
 }
