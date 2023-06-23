@@ -1,0 +1,13 @@
+.inputItemContainer {
+  display: flex;
+  column-gap: 5px;
+  float: right;
+  justify-content: flex-end;
+}
+
+.inputItemContainer input {
+  padding-left: 10px;
+  width: 350px;
+  height: 20px;
+  float: right;
+}
