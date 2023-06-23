@@ -7,7 +7,7 @@ const Layout = () => {
     <>
       <article className={styles.header}>
         <header>
-          <h1>Welcome</h1>
+          <h1>WELCOME TO MY CRUD PROJECT</h1>
         </header>
       </article>
       <section className={styles.contentSection}>

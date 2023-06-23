@@ -1,3 +1,54 @@
 {
-  "users": [{ "id": 1, "name": "John", "email": "john@gmail.com" }]
+  "users": [
+    {
+      "id": 1,
+      "name": "John",
+      "email": "john@gmail.com"
+    },
+    {
+      "name": "sevo",
+      "email": "sevada@gmail.com",
+      "id": 2
+    },
+    {
+      "name": "sevo",
+      "email": "sevada@gmail.com",
+      "id": 3
+    },
+    {
+      "name": "sevo",
+      "email": "sevada@gmail.com",
+      "id": 4
+    },
+    {
+      "name": "Sevada",
+      "email": "sevada.poxosyan@gmail.com",
+      "id": 5
+    },
+    {
+      "name": "Sevada",
+      "email": "sevada.poxosyan@gmail.com",
+      "id": 6
+    },
+    {
+      "name": "sevada",
+      "email": "sev@gmial.com",
+      "id": 7
+    },
+    {
+      "name": "aper",
+      "email": "aper@mai.ru",
+      "id": 8
+    },
+    {
+      "name": "nam",
+      "email": "nam@mail.ru",
+      "id": 9
+    },
+    {
+      "name": "hovik",
+      "email": "hovo@mail.com",
+      "id": 10
+    }
+  ]
 }
