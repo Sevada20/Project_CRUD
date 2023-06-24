@@ -3,8 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import { ApiStatus, IUser } from "../../redux/slices/users/users.type";
 import { getUsersListAction } from "../../redux/slices/users/UserSlice";
+import Modal from "../../components/Modal/Modal";
 
 const UserList = () => {
+  const [dataModalView, setDataModalView] = React.useState<IUser | null>(null);
   const dispatch = useAppDispatch();
   const { list, listStatus } = useAppSelector(
     (state: RootState) => state.users
@@ -15,43 +17,67 @@ const UserList = () => {
   }, []);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Sr. No</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      {listStatus === ApiStatus.loading && (
-        <tbody>
+    <>
+      <table>
+        <thead>
           <tr>
-            <td>List is loading</td>
+            <th>Sr. No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
           </tr>
-        </tbody>
+        </thead>
+        {listStatus === ApiStatus.loading && (
+          <tbody>
+            <tr>
+              <td>List is loading</td>
+            </tr>
+          </tbody>
+        )}
+        {listStatus === ApiStatus.error && (
+          <tbody>
+            <tr>
+              <td>Error while loading list users</td>
+            </tr>
+          </tbody>
+        )}
+        {listStatus === ApiStatus.ideal &&
+          list.map((user: IUser) => {
+            return (
+              <tbody key={user.id}>
+                <tr>
+                  <td>{user.id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <div style={{ display: "flex", columnGap: "5px" }}>
+                      <input
+                        type="button"
+                        value="View "
+                        onClick={() => setDataModalView(user)}
+                      />
+                      <input type="button" value="Edit " />
+                      <input type="button" value="Delete" />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            );
+          })}
+      </table>
+      {dataModalView && (
+        <Modal title="User Details" onClose={() => setDataModalView(null)}>
+          <div>
+            <div>
+              <span>Name:{dataModalView.name}</span>
+            </div>
+            <div>
+              <span>Email:{dataModalView.email}</span>
+            </div>
+          </div>
+        </Modal>
       )}
-      {listStatus === ApiStatus.error && (
-        <tbody>
-          <tr>
-            <td>Error while loading list users</td>
-          </tr>
-        </tbody>
-      )}
-      {listStatus === ApiStatus.ideal &&
-        list.map((user: IUser) => {
-          return (
-            <tbody key={user.id}>
-              <tr>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>Hovo</td>
-              </tr>
-            </tbody>
-          );
-        })}
-    </table>
+    </>
   );
 };
 
