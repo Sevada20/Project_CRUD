@@ -15,6 +15,7 @@ export interface IUserState {
   list: IUser[];
   listStatus: ApiStatus;
   createUserFormStatus: ApiStatus;
+  deleteUserStatus: ApiStatus;
 }
 
 export interface IUserForm {

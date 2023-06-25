@@ -2,7 +2,10 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import { ApiStatus, IUser } from "../../redux/slices/users/users.type";
-import { getUsersListAction } from "../../redux/slices/users/UserSlice";
+import {
+  deleteUserAction,
+  getUsersListAction,
+} from "../../redux/slices/users/UserSlice";
 import Modal from "../../components/Modal/Modal";
 
 const UserList = () => {
@@ -57,7 +60,11 @@ const UserList = () => {
                         onClick={() => setDataModalView(user)}
                       />
                       <input type="button" value="Edit " />
-                      <input type="button" value="Delete" />
+                      <input
+                        type="button"
+                        value="Delete"
+                        onClick={() => dispatch(deleteUserAction(user.id))}
+                      />
                     </div>
                   </td>
                 </tr>
