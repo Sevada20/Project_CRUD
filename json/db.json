@@ -1,3 +1,9 @@
 {
-  "users": []
+  "users": [
+    {
+      "name": "nam",
+      "email": "sev@gmial.com",
+      "id": 2
+    }
+  ]
 }

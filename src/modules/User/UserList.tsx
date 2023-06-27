@@ -5,10 +5,13 @@ import { ApiStatus, IUser } from "../../redux/slices/users/users.type";
 import {
   deleteUserAction,
   getUsersListAction,
+  updateUserAction,
 } from "../../redux/slices/users/UserSlice";
 import Modal from "../../components/Modal/Modal";
+import { useNavigate } from "react-router-dom";
 
 const UserList = () => {
+  const navigate = useNavigate();
   const [dataModalView, setDataModalView] = React.useState<IUser | null>(null);
   const dispatch = useAppDispatch();
   const { list, listStatus } = useAppSelector(
@@ -19,6 +22,9 @@ const UserList = () => {
     dispatch(getUsersListAction());
   }, []);
 
+  const handleClickEditUser = (id: number) => {
+    navigate(`/edit/${id}`);
+  };
   return (
     <>
       <table>
@@ -59,7 +65,11 @@ const UserList = () => {
                         value="View "
                         onClick={() => setDataModalView(user)}
                       />
-                      <input type="button" value="Edit " />
+                      <input
+                        type="button"
+                        value="Edit "
+                        onClick={() => handleClickEditUser(user.id)}
+                      />
                       <input
                         type="button"
                         value="Delete"

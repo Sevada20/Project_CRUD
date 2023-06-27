@@ -1,15 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ApiStatus, IUserState } from "./users.type";
+import {
+  ApiStatus,
+  IUser,
+  IUserForm,
+  IUserState,
+  updateUserData,
+} from "./users.type";
 import { createUser, getUsersList } from "./UserService";
 import axios from "axios";
-import { RootState } from "../../../app/store";
 import { ApiConfig } from "../../../service/ApiConfig";
+import { toastError, toastSuccess } from "../../../components/ToastifyConfig";
 
 const initialState: IUserState = {
   list: [],
   listStatus: ApiStatus.ideal,
   createUserFormStatus: ApiStatus.ideal,
-  deleteUserStatus: ApiStatus.ideal,
+  updateUserFormStatus: ApiStatus.ideal,
 };
 
 export const getUsersListAction = createAsyncThunk(
@@ -26,6 +32,14 @@ export const deleteUserAction = createAsyncThunk(
   async (id: number) => {
     await axios.delete(ApiConfig.user + "/" + id);
     return id;
+  }
+);
+
+export const updateUserAction = createAsyncThunk(
+  "user/updateUserAction",
+  async ({ id, data }: updateUserData) => {
+    const response = await axios.put(`${ApiConfig.user}/${id}`, data);
+    return response.data;
   }
 );
 const usersSlice = createSlice({
@@ -53,19 +67,25 @@ const usersSlice = createSlice({
     builder.addCase(createUserAction.fulfilled, (state, action) => {
       state.list.push(action.payload);
       state.createUserFormStatus = ApiStatus.success;
+      toastSuccess("User created");
     });
     builder.addCase(createUserAction.rejected, (state) => {
       state.createUserFormStatus = ApiStatus.error;
-    });
-    builder.addCase(deleteUserAction.pending, (state) => {
-      state.deleteUserStatus = ApiStatus.loading;
+      toastError("Error while creating user");
     });
     builder.addCase(deleteUserAction.fulfilled, (state, action) => {
       state.list = state.list.filter((user) => user.id !== action.payload);
-      state.deleteUserStatus = ApiStatus.success;
     });
-    builder.addCase(deleteUserAction.rejected, (state) => {
-      state.deleteUserStatus = ApiStatus.error;
+    builder.addCase(updateUserAction.pending, (state) => {
+      state.updateUserFormStatus = ApiStatus.loading;
+    });
+    builder.addCase(updateUserAction.fulfilled, (state, action) => {
+      state.updateUserFormStatus = ApiStatus.ideal;
+      toastSuccess("User updated");
+    });
+    builder.addCase(updateUserAction.rejected, (state) => {
+      state.updateUserFormStatus = ApiStatus.error;
+      toastError("Error while updating user");
     });
   },
 });
