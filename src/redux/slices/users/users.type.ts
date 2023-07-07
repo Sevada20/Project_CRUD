@@ -10,9 +10,14 @@ export enum ApiStatus {
   "success",
   "error",
 }
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export interface IUserState {
-  list: IUser[];
+  list: User[];
   listStatus: ApiStatus;
   createUserFormStatus: ApiStatus;
   updateUserFormStatus: ApiStatus;

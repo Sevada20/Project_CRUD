@@ -1,12 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  ApiStatus,
-  IUser,
-  IUserForm,
-  IUserState,
-  updateUserData,
-} from "./users.type";
-import axios from "axios";
+import { ApiStatus, IUserState, User } from "./users.type";
 import { toastError, toastSuccess } from "../../../components/ToastifyConfig";
 import { db } from "../../../firebase";
 import {
@@ -18,8 +11,6 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
-const usersCollectionRef = collection(db, "users");
-
 const initialState: IUserState = {
   list: [],
   listStatus: ApiStatus.ideal,
@@ -27,71 +18,46 @@ const initialState: IUserState = {
   updateUserFormStatus: ApiStatus.ideal,
 };
 
-export const getUsersListAction = createAsyncThunk(
-  "users/getUsersListAction",
+export const getUsersListAction = createAsyncThunk<User[], void>(
+  "users/fetchUsers",
   async () => {
-    const data = await getDocs(usersCollectionRef);
-    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  }
-);
-// export const getUsersListAction = createAsyncThunk(
-//   "users/getUsersListAction",
-//   async () => {
-//     const { data } = await axios.get<IUser[]>("http://localhost:3030/users");
-//     return data;
-//   }
-// );
-
-export const createUserAction = createAsyncThunk(
-  "user/createUserAction",
-  async (data: IUserForm) => {
-    await addDoc(usersCollectionRef, data);
+    const querySnapshot = await getDocs(collection(db, "users"));
+    return querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      name: doc.data().name,
+      email: doc.data().email,
+    })) as User[];
   }
 );
 
-// export const createUserAction = createAsyncThunk(
-//   "user/createUserAction",
-//   async (data: IUserForm) => {
-//     const response = await axios.post<IUser>(
-//       "http://localhost:3030/users",
-//       data
-//     );
-//     return response.data;
-//   }
-// );
-
-export const deleteUserAction = createAsyncThunk(
-  "users/deleteUserAction",
-  async (id: number) => {
-    const userDoc = doc(usersCollectionRef, id.toString());
-    await deleteDoc(userDoc);
-    return id;
+// @ts-ignore
+export const createUserAction = createAsyncThunk<IUser, IUser>(
+  "users/addUserAsync",
+  async (user) => {
+    const docRef = await addDoc(collection(db, "users"), user);
+    const newUser = { ...user, id: docRef.id };
+    toastSuccess("User added successfully");
+    return newUser;
   }
 );
 
-// export const deleteUserAction = createAsyncThunk(
-//   "users/deleteUserAction",
-//   async (id: number) => {
-//     await axios.delete(`http://localhost:3030/users/${id} `);
-//     return id;
-//   }
-// );
-
+export const deleteUserAction = createAsyncThunk<string, string>(
+  "users/deleteUserAsync",
+  async (userId) => {
+    await deleteDoc(doc(db, "users", userId));
+    toastSuccess("User deleted successfully");
+    return userId;
+  }
+);
 export const updateUserAction = createAsyncThunk(
-  "user/updateUserAction",
-  async ({ id, data }: updateUserData) => {
-    const userDoc = doc(usersCollectionRef, id.toString());
-    await updateDoc(userDoc, data);
+  "users/editUserAsync",
+  async (user: User) => {
+    const { id, ...userData } = user;
+    await updateDoc(doc(db, "users", id), userData);
+    toastSuccess("User updated successfully");
+    return { id, ...userData };
   }
 );
-
-// export const updateUserAction = createAsyncThunk(
-//   "user/updateUserAction",
-//   async ({ id, data }: updateUserData) => {
-//     const response = await axios.put(`http://localhost:3030/users/${id}`, data);
-//     return response.data;
-//   }
-// );
 
 const usersSlice = createSlice({
   name: "users",

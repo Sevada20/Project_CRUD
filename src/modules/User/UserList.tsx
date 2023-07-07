@@ -51,6 +51,7 @@ const UserList = () => {
           </tbody>
         )}
         {listStatus === ApiStatus.ideal &&
+          // @ts-ignore
           list.map((user: IUser) => {
             return (
               <tbody key={user.id}>
@@ -73,6 +74,7 @@ const UserList = () => {
                       <input
                         type="button"
                         value="Delete"
+                        // @ts-ignore
                         onClick={() => dispatch(deleteUserAction(user.id))}
                       />
                     </div>

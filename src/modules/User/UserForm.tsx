@@ -44,7 +44,11 @@ const UserForm = ({ isEditForm }: UserFormProps) => {
     };
     if (emailInput && nameInput) {
       if (isEditForm && params.id) {
-        const dirtyFormData: updateUserData = { id: Number(params.id), data };
+        const dirtyFormData: updateUserData = {
+          id: Number(params.id),
+          data,
+        };
+        // @ts-ignore
         dispatch(updateUserAction(dirtyFormData));
       } else dispatch(createUserAction({ name: nameInput, email: emailInput }));
     } else {
